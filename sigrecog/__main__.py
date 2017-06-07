@@ -1,10 +1,7 @@
-"""
-Allows executing the directory as a Python package from the top-level
-directory. For example:
+import cv2
 
-    python -m sigrecog
-"""
+def main():
+    print('OpenCV version: '+ cv2.__version__)
 
-from . import main
-
-main()
+if __name__ == '__main__':
+    main()
