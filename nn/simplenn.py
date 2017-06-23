@@ -88,8 +88,7 @@ class SimpleNN():
             batches = self.separate_batches(training_data,batch_size)
             self.update_batches(batches,alpha)
 
-            print "Epoch {0}: {1} / {2}".format(
-                epoch, self.evaluate(test_data), n_test)
+            print("Epoch {0}: {1} / {2}".format(epoch, self.evaluate(test_data), n_test))
 
     def evaluate(self, test_data):
         test_results = [(np.argmax(self.feedforward(x)), y)
