@@ -5,7 +5,7 @@ setup(
     version='1.0',
     entry_points={
         'console_scripts': [
-            'sigrecog = sigrecog.__main__:main'
+            'sigrecog = __main__:main'
         ]
     },
     packages=['sigrecog'],
