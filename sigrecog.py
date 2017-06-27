@@ -7,8 +7,8 @@ def main():
 
     current_dir = os.path.dirname(__file__)
 
-    input_folder = os.path.join(current_dir, 'data')
-    input_file = '001001_000.png'
+    input_folder = os.path.join(current_dir, 'data/training/021')
+    input_file = '13_021.PNG'
     img = cv2.imread(os.path.join(input_folder, input_file), 0)
 
     img = preprocess(img)
