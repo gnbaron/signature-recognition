@@ -1,25 +1,37 @@
 import cv2
 import os
 import numpy as np
+import network
 
 def main():
-    print('OpenCV version: '+ cv2.__version__)
+    print('OpenCV version {} '.format(cv2.__version__))
 
     current_dir = os.path.dirname(__file__)
 
     training_folder = os.path.join(current_dir, 'data/training/021')
-
-    #input_file = '13_021.PNG'
-    #img = cv2.imread(os.path.join(training_folder, input_file), 0)
+    test_folder = os.path.join(current_dir, 'data/test/021')
 
     training_data = []
     for filename in os.listdir(training_folder):
         img = cv2.imread(os.path.join(training_folder, filename), 0)
         if img is not None:
             data = prepare(img)
-            training_data.append(data)
+            training_data.append((data, np.array([1, 0], dtype=int)))
 
-    print(training_data)
+    '''
+    test_data = []
+    for filename in os.listdir(test_folder):
+        img = cv2.imread(os.path.join(test_folder, filename), 0)
+        if img is not None:
+            data = prepare(img)
+            test_data.append([data, [1, 0]])
+    '''
+
+    print(np.shape(training_data[0][0]))
+
+    net = network.Net([901, 500, 500, 2])
+    test_data = training_data # TODO
+    net.sgd(training_data, 30, 10, 3.0, test_data)
 
 
 def prepare(input):
@@ -36,14 +48,10 @@ def prepare(input):
     columns = np.sum(resized, axis=0)  # sum of all columns
     lines = np.sum(resized, axis=1)  # sum of all lines
 
-    #cv2.imshow('image', img)
-    #cv2.waitKey(0)
-    #cv2.destroyAllWindows()
-
     h, w = img.shape
     aspect = w / h
 
-    return [*flatten_img, *columns, *lines, aspect]
+    return np.array([*flatten_img, *columns, *lines, aspect], dtype=float)
 
 
 def crop(img):
