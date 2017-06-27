@@ -11,21 +11,31 @@ def main():
     input_file = '13_021.PNG'
     img = cv2.imread(os.path.join(input_folder, input_file), 0)
 
-    img = preprocess(img)
-
-    print(img)
-    cv2.imshow('image', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    print(prepare(img))
 
 
-def preprocess(img):
-    # constrast
-    #img = img * 1.3 - 255
-    denoised = cv2.fastNlMeansDenoising(img)
-    tresh = cv2.adaptiveThreshold(denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-    cropped = crop(tresh)
-    return cropped
+def prepare(input):
+    # preprocessing the image input
+    clean = cv2.fastNlMeansDenoising(input)
+    tresh = cv2.adaptiveThreshold(clean, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    img = crop(tresh)
+
+    # 40x10 image as a flatten array
+    flatten_img = cv2.resize(img, (40, 10), interpolation = cv2.INTER_AREA).flatten()
+
+    # resize to 400x100
+    resized = cv2.resize(img, (400, 100), interpolation = cv2.INTER_AREA)
+    columns = np.sum(resized, axis = 0) # sum of all columns
+    lines = np.sum(resized, axis = 1) # sum of all lines
+
+    #cv2.imshow('image', img)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
+
+    h, w = img.shape
+    aspect = w / h
+
+    return [*flatten_img, *columns, *lines, aspect]
 
 
 def crop(img):
