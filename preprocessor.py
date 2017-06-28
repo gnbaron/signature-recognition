@@ -19,8 +19,7 @@ def prepare(input):
     h, w = img.shape
     aspect = w / h
 
-    data = np.array([*flatten_img, *columns, *lines, aspect], dtype=float)
-    return np.reshape(data, (901, 1))
+    return [*flatten_img, *columns, *lines, aspect]
 
 
 def crop(img):
