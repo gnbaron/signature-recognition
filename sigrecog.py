@@ -3,34 +3,35 @@ import os
 import numpy as np
 import network
 
+
 def main():
     print('OpenCV version {} '.format(cv2.__version__))
 
     current_dir = os.path.dirname(__file__)
 
-    training_folder = os.path.join(current_dir, 'data/training/021')
-    test_folder = os.path.join(current_dir, 'data/test/021')
+    author = '021'
+    training_folder = os.path.join(current_dir, 'data/training/', author)
+    test_folder = os.path.join(current_dir, 'data/test/', author)
 
     training_data = []
     for filename in os.listdir(training_folder):
         img = cv2.imread(os.path.join(training_folder, filename), 0)
         if img is not None:
             data = prepare(img)
-            training_data.append((data, np.array([1, 0], dtype=int)))
+            result = [[0], [1]] if "genuine" in filename else [[1], [0]]
+            result = np.array(result)
+            result = np.reshape(result, (2, 1))
+            training_data.append((data, result))
 
-    '''
     test_data = []
     for filename in os.listdir(test_folder):
         img = cv2.imread(os.path.join(test_folder, filename), 0)
         if img is not None:
             data = prepare(img)
-            test_data.append([data, [1, 0]])
-    '''
-
-    print(np.shape(training_data[0][0]))
+            result = 1 if "genuine" in filename else 0
+            test_data.append((data, result))
 
     net = network.Net([901, 500, 500, 2])
-    test_data = training_data # TODO
     net.sgd(training_data, 30, 10, 3.0, test_data)
 
 
@@ -51,7 +52,8 @@ def prepare(input):
     h, w = img.shape
     aspect = w / h
 
-    return np.array([*flatten_img, *columns, *lines, aspect], dtype=float)
+    data = np.array([*flatten_img, *columns, *lines, aspect], dtype=float)
+    return np.reshape(data, (901, 1))
 
 
 def crop(img):
