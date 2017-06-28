@@ -100,7 +100,7 @@ class Net():
 
 
 def sigmoid(z):
-    return 1.0 / (1.0 + np.exp(-z))
+    return .5 * (1 + np.tanh(.5 * z))
 
 
 def sigmoid_prime(z):
