@@ -13,24 +13,21 @@ def main():
 
     training_data = []
     for filename in os.listdir(training_folder):
+        training_class = [[1],[0]] if "_ge_" in filename else [[0],[1]]
         img = cv2.imread(os.path.join(training_folder, filename), 0)
         if img is not None:
             data = prepare(img)
-            training_data.append((data, np.array([1, 0], dtype=int)))
+            training_data.append((data, np.array(training_class, dtype=int)))
 
-    '''
     test_data = []
     for filename in os.listdir(test_folder):
+        test_class = 1 if "_ge_" in filename else 0
         img = cv2.imread(os.path.join(test_folder, filename), 0)
         if img is not None:
             data = prepare(img)
-            test_data.append([data, [1, 0]])
-    '''
+            test_data.append((data, test_class))
 
-    print(np.shape(training_data[0][0]))
-
-    net = network.Net([901, 500, 500, 2])
-    test_data = training_data # TODO
+    net = network.Net([901, 500, 2])
     net.sgd(training_data, 30, 10, 3.0, test_data)
 
 
@@ -51,7 +48,11 @@ def prepare(input):
     h, w = img.shape
     aspect = w / h
 
-    return np.array([*flatten_img, *columns, *lines, aspect], dtype=float)
+    temp = np.append(np.concatenate((flatten_img,columns,lines)),aspect)
+
+    x = [[j] for j in temp]
+
+    return x
 
 
 def crop(img):

@@ -22,7 +22,9 @@ class Net():
         # [2,3,1] means:
         # * matrix of 3 rows and 2 columns -- will be multiplied by the inputs
         # * matrix of 1 row and 3 columns -- will multiply the hidden layer and produce the output
-        self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
+
+        self.biases = [np.random.randn(500,1),np.random.randn(2,1)]
+        self.weights = [np.random.randn(500,901),np.random.randn(2,500)]
 
     def feedforward(self, a):
         for b,w in zip(self.biases, self.weights):
@@ -58,8 +60,8 @@ class Net():
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
 
-        activation = x
-        activations = [x]
+        activation = np.array(x)
+        activations = [activation]
         zs = []
         for b, w in zip(self.biases, self.weights):
             # layer-bound b and w
