@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 
-class Net():
+class NeuralNetwork():
 
     def __init__(self, sizes):
         # sizes is an array with the number of units in each layer
@@ -44,8 +44,8 @@ class Net():
 
             m = len(batch)
 
-            # x is a array of length 784
-            # y is a single value indicating the digit represented by the 784 elements
+            # x is a array of length 901
+            # y is a single value indicating the digit represented by the 901 elements
             for x, y in batch:
                 delta_b, delta_w = self.backpropagation(x, y)
                 nabla_b = [nb + dnb for nb, dnb in zip(nabla_b, delta_b)]
@@ -91,16 +91,19 @@ class Net():
             print("Epoch {0}: {1} / {2}".format(epoch, self.evaluate(test_data), n_test))
 
     def evaluate(self, test_data):
+        #r = [self.feedforward(x) for (x, y) in test_data]
+        #for a in r:
+        #    print("{0}, {1}".format(format(a[0][0], 'f'), format(a[1][0], 'f')))
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):
-        return (output_activations-y)
+        return output_activations - y
 
 
 def sigmoid(z):
-    return .5 * (1 + np.tanh(.5 * z))
+    return 1.0 / (1.0 + np.exp(-z))
 
 
 def sigmoid_prime(z):
