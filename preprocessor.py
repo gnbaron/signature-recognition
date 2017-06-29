@@ -5,7 +5,7 @@ import numpy as np
 def prepare(input):
     # preprocessing the image input
     clean = cv2.fastNlMeansDenoising(input)
-    ret, tresh = cv2.threshold(clean, 127, 255, cv2.THRESH_BINARY_INV)
+    ret, tresh = cv2.threshold(clean, 127, 1, cv2.THRESH_BINARY_INV)
     img = crop(tresh)
 
     # 40x10 image as a flatten array
@@ -23,7 +23,6 @@ def prepare(input):
 
 
 def crop(img):
-    inverted = 255 - img
-    points = cv2.findNonZero(inverted)
+    points = cv2.findNonZero(img)
     x, y, w, h = cv2.boundingRect(points)
     return img[y: y+h, x: x+w]
