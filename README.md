@@ -2,8 +2,14 @@
 
 Verify the authenticity of handwritten signatures through digital image processing and neural networks.
 
+This is an **experimental project** built during our research on the usage of AI throughout the most diverse fields.
+
 ## Dataset
 We got the dataset from [ICDAR 2009 Signature Verification Competition (SigComp2009)](http://www.iapr-tc11.org/mediawiki/index.php?title=ICDAR_2009_Signature_Verification_Competition_(SigComp2009)).
+
+## Usage
+- `python sigrecog.py` runs using our backpropagation neural network implementation
+- `python sigrecogtf.py` runs using a tensorflow model based on logistic regression
 
 ## Built with
 - OpenCV
@@ -14,10 +20,6 @@ We got the dataset from [ICDAR 2009 Signature Verification Competition (SigComp2
 - OpenCV 3.2
 - Numpy
 - Tensorflow
-
-## Usage
-- `python sigrecog.py` runs using our backpropagation neural network implementation
-- `python sigrecogtf.py` runs using a tensorflow model based on logistic regression
 
 ## Contributors
 
